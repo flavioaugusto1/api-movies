@@ -1,13 +1,13 @@
-const { Router } = require("express")
+const { Router } = require("express");
 
-const UserControllers = require("../controllers/UserControllers")
+const UserControllers = require("../controllers/UserControllers");
+const ensureAthenticated = require("../middlewares/ensureAthenticated");
 
-const usersRouter = Router()
+const usersRouter = Router();
 
-const userControllers = new UserControllers()
+const userControllers = new UserControllers();
 
-usersRouter.post("/", userControllers.create)
-usersRouter.put("/:id", userControllers.update)
+usersRouter.post("/", userControllers.create);
+usersRouter.put("/update", ensureAthenticated, userControllers.update);
 
-module.exports = usersRouter
-
+module.exports = usersRouter;
