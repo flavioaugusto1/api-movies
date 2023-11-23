@@ -4,9 +4,10 @@ const express = require("express");
 const route = require("./routes/index");
 const AppError = require("./utils/AppError");
 const uploadConfig = require("./configs/upload");
+const cors = require("cors");
 
 const app = express();
-
+app.use(cors());
 migrationsRun();
 
 app.use(express.json());
