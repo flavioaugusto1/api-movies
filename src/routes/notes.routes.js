@@ -11,6 +11,7 @@ notesRouter.use(ensureAthenticated);
 
 notesRouter.post("/", notesControllers.create);
 notesRouter.get("/show/:id", notesControllers.show);
+notesRouter.put("/update/:id", notesControllers.update);
 notesRouter.delete("/delete/:id", notesControllers.delete);
 notesRouter.get("/index", notesControllers.index);
 

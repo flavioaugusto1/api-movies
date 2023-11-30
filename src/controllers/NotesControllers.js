@@ -96,6 +96,47 @@ class NotesControllers {
     });
     response.json(notesWithTags);
   }
+
+  async update(request, response) {
+    const { title, description, rating, tags } = request.body;
+    const { id } = request.params;
+    const user_id = request.user.id;
+
+    const note = await knex("movieNotes").where({ id }).first();
+
+    note.title = title ?? note.title;
+    note.description = description ?? note.description;
+    note.rating = rating ?? note.rating;
+    note.tags = tags ?? note.tags;
+
+    const updateTags = tags.map((tag) => {
+      return {
+        user_id,
+        note_id: id,
+        name: tag,
+      };
+    });
+
+    try {
+      await knex("movieNotes")
+        .update({
+          title: note.title,
+          description: note.description,
+          rating: note.rating,
+        })
+        .where({ id });
+
+      await knex("movieTags").where({ note_id: id }).del();
+
+      await knex("movieTags")
+        .insert(updateTags)
+        .where({ note_id: id, user_id });
+    } catch (e) {
+      console.log(e);
+    }
+
+    response.status(200).json();
+  }
 }
 
 module.exports = NotesControllers;
